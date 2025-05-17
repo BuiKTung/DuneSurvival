@@ -65,12 +65,22 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         public Transform GunPoint() => gunPoint;
         public Weapon.Weapon CurrentWeapon() => currentWeapon;
+
+        public Weapon.Weapon BackupWeapon()
+        {
+            foreach (Weapon.Weapon weapon in weaponSlots)
+            {
+                if (weapon != currentWeapon)
+                    return weapon;
+            }
+            return null;
+        }
+        public bool HasOnlyOneWeapon()=>weaponSlots.Count <= 1;
         #region SlotsManagement - Pickup/Equip/Drop
         private void EquipWeapon(int i)
         {
             currentWeapon = weaponSlots[i];
             player.weaponVisuals.PlayWeaponEquipAnimation();
-            player.weaponVisuals.SwitchOffWeaponModels();
         }
 
         public void PickUpWeapon(Weapon.Weapon newWeapon)
@@ -80,13 +90,17 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 return;
             }
             weaponSlots.Add(newWeapon);
+            player.weaponVisuals.SwitchOnBackupWeaponModel();
         }
+        /// <summary>
+        /// !!!bug!!!: not show weapon 
+        /// </summary>
         private void DropWeapon()
         {
             if(weaponSlots.Count <= 1){return;}
 
             weaponSlots.Remove(currentWeapon);
-            currentWeapon = weaponSlots[0];
+            EquipWeapon(0);
         }
         #endregion
         #region AssignInput

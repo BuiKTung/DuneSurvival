@@ -15,6 +15,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private bool isGrabbingWeapon; 
 
         [SerializeField] private WeaponModel[] weaponModels; 
+        [SerializeField] private BackupWeaponModel[] backupWeaponModels;
         
         [Header("Rig ")]
         [SerializeField] private float rigWeightIncreaseRate;
@@ -35,6 +36,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             anim = GetComponentInChildren<Animator>();
             rig = GetComponentInChildren<Rig>();
             weaponModels = GetComponentsInChildren<WeaponModel>(true);
+            backupWeaponModels = GetComponentsInChildren<BackupWeaponModel>(true);
             //SwitchOn(pistol);
         }
 
@@ -47,7 +49,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         public WeaponModel CurrentWeaponModel()
         {
             WeaponModel weaponModel = null;
-            WeaponType weaponType = player.weapon.CurrentWeapon().type;
+            WeaponType weaponType = player.weapon.CurrentWeapon().weaponType;
             foreach (var weapon in weaponModels )
             {
                 if (weapon.weaponType == weaponType)
@@ -80,10 +82,19 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             isGrabbingWeapon = busy;
             anim.SetBool(Constant.BusyGrabbingWeapon, isGrabbingWeapon);
         }
-        public void SwitchOnCurrentWeaponModels()
+        public void SwitchOnCurrentWeaponModel()
         {
             int animationIndex = ((int)CurrentWeaponModel().holdType);
-            SwitchAnimationLayer((int)CurrentWeaponModel().holdType);
+            
+            SwitchOffWeaponModels();
+            
+            SwitchOffBackupWeaponModels();
+            SwitchOnBackupWeaponModel();
+            
+            if(player.weapon.HasOnlyOneWeapon() == false)
+                SwitchOnBackupWeaponModel();
+            
+            SwitchAnimationLayer(animationIndex);
             CurrentWeaponModel().gameObject.SetActive(true);
             AttachLeftHand();
         }
@@ -94,7 +105,26 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 weaponModels[i].gameObject.SetActive(false);
             }
         }
-       
+
+        private void SwitchOffBackupWeaponModels()
+        {
+            foreach (BackupWeaponModel backupModel in backupWeaponModels)
+            {
+                backupModel.gameObject.SetActive(false);
+            }
+        }
+
+        public void SwitchOnBackupWeaponModel()
+        {
+            if(player.weapon.BackupWeapon() == null) return;
+            WeaponType weaponType = player.weapon.BackupWeapon().weaponType;
+            
+            foreach (BackupWeaponModel backupModel in backupWeaponModels)
+            {
+                if(backupModel.weaponType == weaponType)
+                    backupModel.gameObject.SetActive(true); 
+            }
+        }
         private void SwitchAnimationLayer(int layerIndex)
         {
             for (int i = 1; i < anim.layerCount; i++)

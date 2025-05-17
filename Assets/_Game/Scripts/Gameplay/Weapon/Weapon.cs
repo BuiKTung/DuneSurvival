@@ -5,7 +5,7 @@ namespace _Game.Scripts.Gameplay.Weapon
    [System.Serializable]
    public class Weapon 
    {
-      public WeaponType type;
+      [FormerlySerializedAs("type")] public WeaponType weaponType;
       [FormerlySerializedAs("ammo")] public int bulletsInMagazine;
       public int magazineCapacity;
       [FormerlySerializedAs("maxAmmo")] public int totalReserveAmmo;
