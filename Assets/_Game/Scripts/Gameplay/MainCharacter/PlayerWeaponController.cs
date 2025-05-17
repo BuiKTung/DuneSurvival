@@ -25,7 +25,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             player = GetComponent<Player>();
             AssignInputEvents();
-            EquipWeapon(0);
+            currentWeapon = weaponSlots[0];
             currentWeapon.bulletsInMagazine = currentWeapon.totalReserveAmmo;
             
         }
@@ -69,6 +69,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private void EquipWeapon(int i)
         {
             currentWeapon = weaponSlots[i];
+            player.weaponVisuals.PlayWeaponEquipAnimation();
+            player.weaponVisuals.SwitchOffWeaponModels();
         }
 
         public void PickUpWeapon(Weapon.Weapon newWeapon)

@@ -31,5 +31,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             visualController.SetBusyGrabbingWeaponTo(false);
         }
+
+        public void SwichOnWeaponModel() => visualController.SwitchOnCurrentWeaponModels();
     }
 }
