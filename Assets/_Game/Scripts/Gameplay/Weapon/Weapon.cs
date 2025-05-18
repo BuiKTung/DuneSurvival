@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Gameplay.Weapon
@@ -5,10 +6,16 @@ namespace _Game.Scripts.Gameplay.Weapon
    [System.Serializable]
    public class Weapon 
    {
-      [FormerlySerializedAs("type")] public WeaponType weaponType;
-      [FormerlySerializedAs("ammo")] public int bulletsInMagazine;
+      public WeaponType weaponType;
+      public int bulletsInMagazine;
       public int magazineCapacity;
-      [FormerlySerializedAs("maxAmmo")] public int totalReserveAmmo;
+      public int totalReserveAmmo;
+      
+      [Range(1,3)]
+      public float reloadSpeed = 1;
+      [Range(1,3)]
+      public float equipSpeed = 1;
+      
       public bool CanShoot()
       {
          return HaveEnoughBullets();

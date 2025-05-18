@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts.Gameplay.Weapon;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public enum GrabType { SideGrab, BackGrab };
+public enum EquipType { SideEquipAnimation, BackEquipAnimation };
 public enum HoldType {
     CommonHold = 1,
     LowHold = 2,
@@ -12,7 +13,7 @@ public enum HoldType {
 public class WeaponModel : MonoBehaviour
 {
     public WeaponType weaponType;
-    public GrabType grabType;
+    public EquipType equipType;
     public HoldType holdType;
     public Transform gunPoint;
     public Transform holdPoint;

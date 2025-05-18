@@ -2416,7 +2416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 3
-  grabType: 1
+  equipType: 1
   holdType: 2
   gunPoint: {fileID: 1224013133}
   holdPoint: {fileID: 2078607759}
@@ -4031,7 +4031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 0
-  grabType: 0
+  equipType: 0
   holdType: 1
   gunPoint: {fileID: 975376891}
   holdPoint: {fileID: 1675843671}
@@ -4872,7 +4872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 1
-  grabType: 0
+  equipType: 0
   holdType: 1
   gunPoint: {fileID: 1581806547}
   holdPoint: {fileID: 166916586}
@@ -5736,7 +5736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 2
-  grabType: 1
+  equipType: 1
   holdType: 1
   gunPoint: {fileID: 995704674}
   holdPoint: {fileID: 1658848704}
@@ -7222,6 +7222,8 @@ MonoBehaviour:
     bulletsInMagazine: 5
     magazineCapacity: 0
     totalReserveAmmo: 5
+    reloadSpeed: 1
+    equipSpeed: 1
 --- !u!65 &1456170106
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8812,23 +8814,25 @@ MonoBehaviour:
     bulletsInMagazine: 10
     magazineCapacity: 0
     totalReserveAmmo: 10
+    reloadSpeed: 1
+    equipSpeed: 1
   bulletPrefab: {fileID: 709851603379088992, guid: 5d6f9576cecc23b428a0b635b90998be, type: 3}
   bulletSpeed: 15
   gunPoint: {fileID: 975376891}
   weaponHolder: {fileID: 1354336790}
   weaponSlots:
-  - weaponType: 3
+  - weaponType: 0
     bulletsInMagazine: 5
     magazineCapacity: 5
     totalReserveAmmo: 6
+    reloadSpeed: 1
+    equipSpeed: 2
   - weaponType: 4
     bulletsInMagazine: 5
     magazineCapacity: 5
     totalReserveAmmo: 6
-  - weaponType: 2
-    bulletsInMagazine: 5
-    magazineCapacity: 5
-    totalReserveAmmo: 6
+    reloadSpeed: 1
+    equipSpeed: 1
   maxSlots: 3
 --- !u!114 &1746550278
 MonoBehaviour:
@@ -10496,7 +10500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 4
-  grabType: 1
+  equipType: 1
   holdType: 3
   gunPoint: {fileID: 936453078}
   holdPoint: {fileID: 1155908563}

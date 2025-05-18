@@ -25,10 +25,14 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             player = GetComponent<Player>();
             AssignInputEvents();
-            currentWeapon = weaponSlots[0];
+            Invoke(nameof(EquipStartingWeapon),1f);
             currentWeapon.bulletsInMagazine = currentWeapon.totalReserveAmmo;
-            
         }
+        private void EquipStartingWeapon()
+        {
+            EquipWeapon(0);
+        }
+
         private void Shoot()
         {
             if (currentWeapon.CanShoot()== false)
