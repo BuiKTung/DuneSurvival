@@ -1,3 +1,4 @@
+using _Game.Scripts.Utilities;
 using UnityEngine;
 
 namespace _Game.Scripts.Gameplay.Weapon
@@ -11,7 +12,7 @@ namespace _Game.Scripts.Gameplay.Weapon
         private void OnCollisionEnter(Collision collision)
         {
             CreateImpactFx(collision);
-            Destroy(gameObject);
+            ObjectPool.Instance.ReturnToPool(gameObject);
         }
 
         private void CreateImpactFx(Collision collision)

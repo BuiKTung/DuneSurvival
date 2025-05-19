@@ -16,11 +16,29 @@ namespace _Game.Scripts.Gameplay.Weapon
       [Range(1,3)]
       public float equipSpeed = 1;
       
+      [Space]
+      public float fireRate = 1; //bullet per second 
+      private float lastShootTime = Mathf.NegativeInfinity;
       public bool CanShoot()
       {
-         return HaveEnoughBullets();
+         if (HaveEnoughBullets() && ReadyToFire())
+         {
+            bulletsInMagazine--;
+            return true;
+         }
+         return false;
+      }
+      private bool ReadyToFire()
+      {
+         if (Time.time > lastShootTime + 1f / fireRate)
+         {
+            lastShootTime = Time.time; 
+            return true;
+         }
+         return false;
       }
 
+      #region Reload Methods
       public bool CanReload()
       {
          if(bulletsInMagazine == magazineCapacity)
@@ -43,16 +61,9 @@ namespace _Game.Scripts.Gameplay.Weapon
          if(totalReserveAmmo < 0)
             totalReserveAmmo = 0;
       }
-      private bool HaveEnoughBullets()
-      {
-         if (bulletsInMagazine > 0)
-         {
-            bulletsInMagazine--;
-            return true;
-         }
 
-         return false;
-      }
+      private bool HaveEnoughBullets() => bulletsInMagazine > 0;
+      #endregion
    }
 
    public enum WeaponType

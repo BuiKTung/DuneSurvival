@@ -39,16 +39,17 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             {
                 return;
             }
-            
-            GameObject newBullet =
-                Instantiate(bulletPrefab, gunPoint.position, Quaternion.LookRotation(gunPoint.forward));
 
+            GameObject newBullet = ObjectPool.Instance.GetBullet();
+                //Instantiate(bulletPrefab, gunPoint.position, Quaternion.LookRotation(gunPoint.forward));
+            newBullet.transform.position = GunPoint().position;
+            newBullet.transform.rotation = Quaternion.LookRotation(gunPoint.forward);
+            
             Rigidbody rbNewBullet = newBullet.GetComponent<Rigidbody>();
 
             rbNewBullet.mass = REFERENCE_BULLET_SPEED / bulletSpeed;
             rbNewBullet.velocity = BulletDirection() * bulletSpeed;
-
-            Destroy(newBullet, 10);
+            
             GetComponentInChildren<Animator>().SetTrigger(Constant.Fire);
         }
 
