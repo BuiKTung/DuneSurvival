@@ -15,9 +15,9 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         public void ReloadIsOver()
         {
             visualController.MaximizeRigWeight();
-            
             //refill-bullets
             weaponController.CurrentWeapon().ReloadBullets();
+            weaponController.SetWeaponReady(true);
         }
 
 
@@ -27,9 +27,9 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             visualController.MaximizeLeftHandWeight();
         }
 
-        public void WeaponGrabIsOver()
+        public void WeaponEquipingIsOver()
         {
-            visualController.SetBusyGrabbingWeaponTo(false);
+            weaponController.SetWeaponReady(true);
         }
 
         public void SwichOnWeaponModel() => visualController.SwitchOnCurrentWeaponModel();

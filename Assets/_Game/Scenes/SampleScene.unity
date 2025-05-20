@@ -2641,6 +2641,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3505226547261043365, guid: 02097ff7d4f39e040b62297b2bc1a5d8, type: 3}
   m_PrefabInstance: {fileID: 1567662432}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &562557417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 562557419}
+  - component: {fileID: 562557418}
+  m_Layer: 0
+  m_Name: ObjectPooling
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &562557418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562557417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff7383f4eb984324692d8e52bf0b9957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 709851603379088992, guid: 5d6f9576cecc23b428a0b635b90998be, type: 3}
+  poolSize: 10
+--- !u!4 &562557419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562557417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.297218, y: 1.1868447, z: 0.58759946}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &572609312
 GameObject:
   m_ObjectHideFlags: 0
@@ -4475,7 +4521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 995704674}
   m_Layer: 8
-  m_Name: Gunpoint
+  m_Name: GunPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7219,11 +7265,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon:
     weaponType: 4
+    shootType: 0
+    bulletsPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    burstAvalible: 0
+    burstActive: 0
+    burstModePerShoot: 0
+    burstModeFireRate: 0
+    burstFireDelay: 0.1
     bulletsInMagazine: 5
     magazineCapacity: 0
     totalReserveAmmo: 5
     reloadSpeed: 1
     equipSpeed: 1
+    currentSpread: 2
+    baseSpread: 0.5
+    maxSpread: 3
+    spreadIncreaseRate: 0.15
 --- !u!65 &1456170106
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8810,29 +8869,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentWeapon:
-    weaponType: 0
-    bulletsInMagazine: 10
-    magazineCapacity: 0
-    totalReserveAmmo: 10
+    weaponType: 2
+    shootType: 1
+    bulletsPerShot: 1
+    defaultFireRate: 0
+    fireRate: 10
+    burstAvalible: 1
+    burstActive: 0
+    burstModePerShoot: 3
+    burstModeFireRate: 0
+    burstFireDelay: 0.1
+    bulletsInMagazine: 100
+    magazineCapacity: 100
+    totalReserveAmmo: 1000
     reloadSpeed: 1
     equipSpeed: 1
+    currentSpread: 2
+    baseSpread: 0.5
+    maxSpread: 3
+    spreadIncreaseRate: 0.15
   bulletPrefab: {fileID: 709851603379088992, guid: 5d6f9576cecc23b428a0b635b90998be, type: 3}
   bulletSpeed: 15
-  gunPoint: {fileID: 975376891}
   weaponHolder: {fileID: 1354336790}
   weaponSlots:
-  - weaponType: 0
-    bulletsInMagazine: 5
-    magazineCapacity: 5
-    totalReserveAmmo: 6
+  - weaponType: 2
+    shootType: 1
+    bulletsPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    burstAvalible: 1
+    burstActive: 0
+    burstModePerShoot: 3
+    burstModeFireRate: 0
+    burstFireDelay: 0.1
+    bulletsInMagazine: 100
+    magazineCapacity: 100
+    totalReserveAmmo: 1000
     reloadSpeed: 1
-    equipSpeed: 2
-  - weaponType: 4
+    equipSpeed: 1
+    currentSpread: 2
+    baseSpread: 0.5
+    maxSpread: 3
+    spreadIncreaseRate: 0.15
+  - weaponType: 3
+    shootType: 0
+    bulletsPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    burstAvalible: 1
+    burstActive: 0
+    burstModePerShoot: 5
+    burstModeFireRate: 0
+    burstFireDelay: 0.1
     bulletsInMagazine: 5
     magazineCapacity: 5
     totalReserveAmmo: 6
     reloadSpeed: 1
     equipSpeed: 1
+    currentSpread: 2
+    baseSpread: 15
+    maxSpread: 15
+    spreadIncreaseRate: 0.15
   maxSlots: 3
 --- !u!114 &1746550278
 MonoBehaviour:
@@ -15577,3 +15674,4 @@ SceneRoots:
   - {fileID: 2141233248}
   - {fileID: 489048668}
   - {fileID: 1456170107}
+  - {fileID: 562557419}

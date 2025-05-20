@@ -6,9 +6,23 @@ namespace _Game.Scripts.Gameplay.Weapon
     public class Bullet : MonoBehaviour
     {
         [SerializeField] private GameObject bulletImpactFX;
-
+        
         private Rigidbody rb => GetComponent<Rigidbody>(); 
+        private Vector3 startPosition;
+        private float flyDistance;
 
+        private void Update()
+        {
+            if (Vector3.Distance(startPosition, transform.position) > flyDistance)
+            {
+                ObjectPool.Instance.ReturnToPool(gameObject);
+            }
+        }
+        public void BulletSetup(float flyDistance)
+        {
+            startPosition = transform.position;
+            this.flyDistance = flyDistance;
+        }
         private void OnCollisionEnter(Collision collision)
         {
             CreateImpactFx(collision);

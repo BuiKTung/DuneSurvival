@@ -52,11 +52,20 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         private void UpdateAimVisuals()
         {
+            aimLaser.enabled = player.weapon.WeaponReady();
+            if(aimLaser.enabled == false)
+                return;
+
+            WeaponModel weaponModel = player.weaponVisuals.CurrentWeaponModel();
+            
+           weaponModel.transform.LookAt(aim); 
+           weaponModel.gunPoint.LookAt(aim);
+           
             Transform gunPoint = player.weapon.GunPoint();
             Vector3 laserDirection = player.weapon.BulletDirection();
 
             float laserTipLenght = .5f;
-            float gunDistance = 4f;
+            float gunDistance = player.weapon.CurrentWeapon().gunDistance;
 
             Vector3 endPoint = gunPoint.position + laserDirection * gunDistance;
 

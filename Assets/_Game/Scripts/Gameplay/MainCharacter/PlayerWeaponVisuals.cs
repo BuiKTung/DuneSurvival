@@ -12,7 +12,6 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         //private static readonly int WeaponGrab = Animator.StringToHash("WeaponGrab");
         private Player player;
         private Animator anim;
-        private bool isEquipingWeapon; 
 
         [SerializeField] private WeaponModel[] weaponModels; 
         [SerializeField] private BackupWeaponModel[] backupWeaponModels;
@@ -59,15 +58,12 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         }
         public void PlayReloadAnimation()
         {
-            if(isEquipingWeapon)
-                return;
             float reloadSpeed = player.weapon.CurrentWeapon().reloadSpeed;
             anim.SetTrigger(Constant.Reload);
             anim.SetFloat(Constant.ReloadSpeed, reloadSpeed);
             ReduceRigWeight();
         }
-
-        
+        public void PlayerFireAnimation() => anim.SetTrigger(Constant.Fire);
         public void PlayWeaponEquipAnimation()
         {
             EquipType equipType = CurrentWeaponModel().equipType;
@@ -79,12 +75,6 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             anim.SetFloat(Constant.EquipType, ((float)equipType));
             anim.SetTrigger(Constant.EquipWeapon);
             anim.SetFloat(Constant.EquipSpeed, equipSpeed);
-            SetBusyGrabbingWeaponTo(true);
-        }
-        public void SetBusyGrabbingWeaponTo(bool busy)
-        {
-            isEquipingWeapon = busy;
-            anim.SetBool(Constant.BusyEquipingWeapon, isEquipingWeapon);
         }
         public void SwitchOnCurrentWeaponModel()
         {
