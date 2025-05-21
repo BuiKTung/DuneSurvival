@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts.Gameplay.Weapon;
+using _Game.Scripts.Systems;
 using _Game.Scripts.Utilities;
 using UnityEngine;
 
@@ -39,8 +40,6 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             if(isShooting)
                 Shoot();
-            if(Input.GetKeyDown(KeyCode.T))
-                currentWeapon.ToggleBurst();
         }
 
         private void EquipStartingWeapon()
@@ -112,23 +111,30 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         public Transform GunPoint() => player.weaponVisuals.CurrentWeaponModel().gunPoint;
         public Weapon.Weapon CurrentWeapon() => currentWeapon;
+        
+        public bool HasOnlyOneWeapon()=>weaponSlots.Count <= 1;
 
-        public Weapon.Weapon BackupWeapon()
+        public Weapon.Weapon WeaponInSlots(WeaponType weaponType)
         {
-            foreach (Weapon.Weapon weapon in weaponSlots)
+            foreach (var weapon in weaponSlots)
             {
-                if (weapon != currentWeapon)
+                if(weapon.weaponType == weaponType)
                     return weapon;
             }
             return null;
         }
-        public bool HasOnlyOneWeapon()=>weaponSlots.Count <= 1;
         #region SlotsManagement - Pickup/Equip/Drop/Ready/... Weapon
         private void EquipWeapon(int i)
         {
+            if (i >= weaponSlots.Count)
+                return;
+
             SetWeaponReady(false);
+
             currentWeapon = weaponSlots[i];
             player.weaponVisuals.PlayWeaponEquipAnimation();
+
+            CameraManager.Instance.ChangeCameraDistance(currentWeapon.cameraDistance);
         }
 
         public void PickUpWeapon(Weapon.Weapon newWeapon)
@@ -163,8 +169,12 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             controls.Character.Fire.canceled += context => isShooting = false;
             controls.Character.EquipSlot1.performed += context => EquipWeapon(0);
             controls.Character.EquipSlot2.performed += context => EquipWeapon(1);
+            controls.Character.EquipSlot3.performed += context => EquipWeapon(2);
+            controls.Character.EquipSlot4.performed += context => EquipWeapon(3);
+            controls.Character.EquipSlot5.performed += context => EquipWeapon(4);
             controls.Character.Drop.performed += context => DropWeapon();
-            controls.Character.Reload.performed += context =>
+            controls.Character.ToogleWeaponMode.performed += context => 
+            controls.Character.Reload.performed += context => currentWeapon.ToggleBurst();
             {
                 if (currentWeapon.CanReload())
                 {

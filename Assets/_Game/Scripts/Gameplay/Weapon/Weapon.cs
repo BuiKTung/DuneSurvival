@@ -8,6 +8,8 @@ namespace _Game.Scripts.Gameplay.Weapon
    public class Weapon 
    {
       public WeaponType weaponType;
+      [Range(2, 12)] public float gunDistance = 4;
+      [Range(3f, 8f)] public float cameraDistance = 6f;
 
       [Header("Shoot details")] 
       public ShootType shootType;
@@ -34,7 +36,6 @@ namespace _Game.Scripts.Gameplay.Weapon
       [Range(1,3)]
       public float equipSpeed = 1;
 
-      [Range(2, 12)] public float gunDistance = 4;
       
       [Header("Spread details")] 
       private float currentSpread = 2f;
