@@ -14,10 +14,10 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private Player player;
         private const float REFERENCE_BULLET_SPEED = 20;
         //This is the default speed from whcih our mass formula is derived.
-        
+        [SerializeField] private Weapon_Data defaultWeaponData;
         [SerializeField] private Weapon.Weapon currentWeapon;
-        private bool weaponReady;
-        private bool isShooting;
+        [SerializeField]private bool weaponReady;
+        [SerializeField]private bool isShooting;
         
         [Header("Bullet details")]
         [SerializeField] private GameObject bulletPrefab;
@@ -42,19 +42,13 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 Shoot();
         }
 
-        private void EquipStartingWeapon()
-        {
-            EquipWeapon(0);
-        }
-
         private void Shoot()
         {
             if (currentWeapon.CanShoot() == false || !weaponReady)
             {
                 return;
             }
-            
-            
+
             if(currentWeapon.shootType == ShootType.Single)
                 isShooting = false;
             if(currentWeapon.BurstActivated() == true)
@@ -67,7 +61,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         private void FireSingleBullet()
         {
-            GameObject newBullet = ObjectPool.Instance.GetBullet();
+            GameObject newBullet = ObjectPool.Instance.GetObject(bulletPrefab);
             newBullet.transform.position = GunPoint().position;
             newBullet.transform.rotation = Quaternion.LookRotation(GunPoint().forward);
             
@@ -84,7 +78,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private IEnumerator BurstFire()
         {
             SetWeaponReady(false);
-            for (int i = 0; i < currentWeapon.burstModePerShoot; i++)
+            for (int i = 0; i < currentWeapon.bulletsPerShot; i++)
             {
                 FireSingleBullet();
                  yield return new WaitForSeconds(currentWeapon.burstFireDelay);
@@ -124,6 +118,13 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             return null;
         }
         #region SlotsManagement - Pickup/Equip/Drop/Ready/... Weapon
+        
+        private void EquipStartingWeapon()
+        {
+            weaponSlots[0] = new Weapon.Weapon(defaultWeaponData);
+            EquipWeapon(0);
+        }
+
         private void EquipWeapon(int i)
         {
             if (i >= weaponSlots.Count)
@@ -137,12 +138,15 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             CameraManager.Instance.ChangeCameraDistance(currentWeapon.cameraDistance);
         }
 
-        public void PickUpWeapon(Weapon.Weapon newWeapon)
+        public void PickUpWeapon(Weapon_Data newWeaponData)
         {
             if (weaponSlots.Count >= maxSlots)
             {
                 return;
             }
+
+            Weapon.Weapon newWeapon = new Weapon.Weapon(newWeaponData);
+            
             weaponSlots.Add(newWeapon);
             player.weaponVisuals.SwitchOnBackupWeaponModel();
         }
@@ -173,8 +177,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             controls.Character.EquipSlot4.performed += context => EquipWeapon(3);
             controls.Character.EquipSlot5.performed += context => EquipWeapon(4);
             controls.Character.Drop.performed += context => DropWeapon();
-            controls.Character.ToogleWeaponMode.performed += context => 
-            controls.Character.Reload.performed += context => currentWeapon.ToggleBurst();
+            controls.Character.ToogleWeaponMode.performed += context => currentWeapon.ToggleBurst();
+            controls.Character.Reload.performed += context => 
             {
                 if (currentWeapon.CanReload())
                 {

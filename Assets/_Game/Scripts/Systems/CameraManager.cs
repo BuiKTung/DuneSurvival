@@ -37,7 +37,7 @@ namespace _Game.Scripts.Systems
                 return;
             
             transposer.m_CameraDistance = 
-                Mathf.Lerp(transposer.m_CameraDistance, targetCameraDistance, Time.deltaTime * distanceChangeRate);
+                Mathf.Lerp(currentDistance, targetCameraDistance, Time.deltaTime * distanceChangeRate);
         }
 
         public void ChangeCameraDistance(float distance)

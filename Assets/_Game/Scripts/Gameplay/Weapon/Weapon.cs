@@ -5,46 +5,85 @@ using Random = UnityEngine.Random;
 namespace _Game.Scripts.Gameplay.Weapon
 {
    [System.Serializable]
-   public class Weapon 
+   public class Weapon
    {
       public WeaponType weaponType;
-      [Range(2, 12)] public float gunDistance = 4;
-      [Range(3f, 8f)] public float cameraDistance = 6f;
-
-      [Header("Shoot details")] 
-      public ShootType shootType;
-      public int bulletsPerShot;
-      public int defaultFireRate;
-      public float fireRate = 1; //bullet per second 
-      private float lastShootTime = Mathf.NegativeInfinity;
-
-      [Header("BurstShoot details")] 
-      public bool burstAvalible;
+      #region Regular mode variables
+       public ShootType shootType;
+       public int bulletsPerShot { get; private set; }
+       private float defaultFireRate;
+       public float fireRate = 1; // bullets per second
+       private float lastShootTime;
+       #endregion
+      #region Burst mode  variables
+      private bool burstAvalible;
       public bool burstActive;
-      
-      public int burstModePerShoot;
-      public float burstModeFireRate;
-      public float burstFireDelay = .1f;
-      
-      [Header("Magazine details")]
-      public int bulletsInMagazine;
-      public int magazineCapacity;
-      public int totalReserveAmmo;
-      
-      [Range(1,3)]
-      public float reloadSpeed = 1;
-      [Range(1,3)]
-      public float equipSpeed = 1;
 
-      
-      [Header("Spread details")] 
-      private float currentSpread = 2f;
-      public float baseSpread = 0.5f;
-      public float maxSpread = 3f;
-      
-      public float  spreadIncreaseRate = .15f;
-      private float lastSpreadUpdateTime;
-      private float spreadCooldown = 1;
+      private int burstBulletsPerShot;
+      private float burstFireRate;
+      public float burstFireDelay { get; private set; }
+      #endregion
+
+      [Header("Magazine details")]
+       public int bulletsInMagazine;
+       public int magazineCapacity;
+       public int totalReserveAmmo;
+
+       #region Weapon generic info variables
+       
+       public float reloadSpeed { get; private set; } // how fast charcater reloads weapon    
+       public float equipmentSpeed { get; private set; } // how fast character equips weapon
+       public float gunDistance { get; private set; }
+       public float cameraDistance { get; private set; }
+       #endregion
+       #region Weapon spread variables
+       [Header("Spread ")] 
+       private float baseSpread = 1;
+       private float maximumSpread = 3;
+       private float currentSpread = 2;
+
+       private float spreadIncreaseRate = .15f;
+
+       private float lastSpreadUpdateTime;
+       private float spreadCooldown = 1;
+
+       #endregion
+
+       public Weapon(Weapon_Data weaponData)
+       {
+
+           bulletsInMagazine = weaponData.bulletsInMagazine;
+           magazineCapacity = weaponData.magazineCapacity;
+           totalReserveAmmo = weaponData.totalReserveAmmo;
+
+           fireRate = weaponData.fireRate;
+           weaponType = weaponData.weaponType;
+
+           bulletsPerShot = weaponData.bulletsPerShot;
+           shootType = weaponData.shootType;
+
+
+           burstAvalible = weaponData.burstAvalible;
+           burstActive = weaponData.burstActive;
+           burstBulletsPerShot = weaponData.burstBulletsPerShot;
+           burstFireRate = weaponData.burstFireRate;
+           burstFireDelay = weaponData.burstFireDelay;
+
+
+           baseSpread = weaponData.baseSpread;
+           maximumSpread = weaponData.maxSpread;
+           spreadIncreaseRate = weaponData.spreadIncreaseRate;
+
+
+           reloadSpeed = weaponData.reloadSpeed;
+           equipmentSpeed = weaponData.equipmentSpeed;
+           gunDistance = weaponData.gunDistance;
+           cameraDistance = weaponData.cameraDistance;
+
+           
+
+           defaultFireRate = fireRate;
+       }
       public void ReduceBulletsInMagazine()
       {
          if (weaponType == WeaponType.Shotgun)
@@ -91,8 +130,8 @@ namespace _Game.Scripts.Gameplay.Weapon
          burstActive = !burstActive;
          if (burstActive)
          {
-            bulletsPerShot = burstModePerShoot;
-            fireRate = burstModeFireRate;
+            bulletsPerShot = burstBulletsPerShot;
+            fireRate = burstFireRate;
          }
          else
          {
@@ -128,7 +167,7 @@ namespace _Game.Scripts.Gameplay.Weapon
       }
       public void IncreaseSpread()
       {
-         currentSpread = Mathf.Clamp(currentSpread + spreadIncreaseRate, baseSpread, maxSpread);
+         currentSpread = Mathf.Clamp(currentSpread + spreadIncreaseRate, baseSpread, maximumSpread);
       }
       #endregion
 

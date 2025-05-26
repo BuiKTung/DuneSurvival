@@ -49,11 +49,11 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             float xVelocity = Vector3.Dot(movementDirection.normalized, transform.right);
             float zVelocity = Vector3.Dot(movementDirection.normalized, transform.forward);
 
-            animator.SetFloat(Constant.XVelocity, xVelocity, .1f, Time.deltaTime);
-            animator.SetFloat(Constant.ZVelocity, zVelocity, .1f, Time.deltaTime);
+            animator.SetFloat(Constant.AnimationParameter.XVelocity, xVelocity, .1f, Time.deltaTime);
+            animator.SetFloat(Constant.AnimationParameter.ZVelocity, zVelocity, .1f, Time.deltaTime);
 
             bool playRunAnimation = isRunning & movementDirection.magnitude > 0;
-            animator.SetBool(Constant.IsRunning, playRunAnimation);
+            animator.SetBool(Constant.AnimationParameter.IsRunning, playRunAnimation);
         }
         private void ApplyRotation()
         {

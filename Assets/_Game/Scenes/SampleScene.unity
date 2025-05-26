@@ -4148,7 +4148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCameraDistance: 0
   distanceChangeRate: 0
-  canChangeCameraDistance: 1
+  canChangeCameraDistance: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -7255,27 +7255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e031ff353961e04a95de0bc9cd4a102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon:
-    weaponType: 4
-    gunDistance: 4
-    cameraDistance: 6
-    shootType: 0
-    bulletsPerShot: 0
-    defaultFireRate: 0
-    fireRate: 1
-    burstAvalible: 0
-    burstActive: 0
-    burstModePerShoot: 0
-    burstModeFireRate: 0
-    burstFireDelay: 0.1
-    bulletsInMagazine: 5
-    magazineCapacity: 0
-    totalReserveAmmo: 5
-    reloadSpeed: 1
-    equipSpeed: 1
-    baseSpread: 0.5
-    maxSpread: 3
-    spreadIncreaseRate: 0.15
+  weapon: {fileID: 11400000, guid: 5b07168e91ef58349a5d9a3c4bd36a14, type: 2}
 --- !u!65 &1456170106
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8836,91 +8816,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a221e91cdd91c14c8461a90ec881d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultWeaponData: {fileID: 11400000, guid: 0f3e4851383c88b42b346556d06f63c7, type: 2}
   currentWeapon:
     weaponType: 2
-    gunDistance: 4
-    cameraDistance: 6
     shootType: 1
-    bulletsPerShot: 1
-    defaultFireRate: 0
     fireRate: 10
-    burstAvalible: 1
     burstActive: 0
-    burstModePerShoot: 3
-    burstModeFireRate: 0
-    burstFireDelay: 0.1
     bulletsInMagazine: 100
     magazineCapacity: 100
     totalReserveAmmo: 1000
-    reloadSpeed: 1
-    equipSpeed: 1
-    baseSpread: 0.5
-    maxSpread: 3
-    spreadIncreaseRate: 0.15
   bulletPrefab: {fileID: 709851603379088992, guid: 5d6f9576cecc23b428a0b635b90998be, type: 3}
   bulletSpeed: 15
   weaponHolder: {fileID: 1354336790}
   weaponSlots:
   - weaponType: 2
-    gunDistance: 4
-    cameraDistance: 6
     shootType: 1
-    bulletsPerShot: 0
-    defaultFireRate: 0
-    fireRate: 1
-    burstAvalible: 1
+    fireRate: 10
     burstActive: 0
-    burstModePerShoot: 3
-    burstModeFireRate: 0
-    burstFireDelay: 0.1
     bulletsInMagazine: 100
     magazineCapacity: 100
     totalReserveAmmo: 1000
-    reloadSpeed: 1
-    equipSpeed: 1
-    baseSpread: 0.5
-    maxSpread: 3
-    spreadIncreaseRate: 0.15
   - weaponType: 3
-    gunDistance: 4
-    cameraDistance: 6
     shootType: 0
-    bulletsPerShot: 0
-    defaultFireRate: 0
     fireRate: 1
-    burstAvalible: 1
     burstActive: 0
-    burstModePerShoot: 5
-    burstModeFireRate: 0
-    burstFireDelay: 0.1
     bulletsInMagazine: 2
     magazineCapacity: 2
     totalReserveAmmo: 100
-    reloadSpeed: 1
-    equipSpeed: 1
-    baseSpread: 15
-    maxSpread: 15
-    spreadIncreaseRate: 0.15
   - weaponType: 1
-    gunDistance: 4
-    cameraDistance: 6
     shootType: 0
-    bulletsPerShot: 0
-    defaultFireRate: 0
     fireRate: 1
-    burstAvalible: 1
     burstActive: 0
-    burstModePerShoot: 5
-    burstModeFireRate: 0
-    burstFireDelay: 0.1
     bulletsInMagazine: 6
     magazineCapacity: 6
     totalReserveAmmo: 100
-    reloadSpeed: 1
-    equipSpeed: 1
-    baseSpread: 15
-    maxSpread: 15
-    spreadIncreaseRate: 0.15
+  - weaponType: 2
+    shootType: 1
+    fireRate: 1
+    burstActive: 1
+    bulletsInMagazine: 6
+    magazineCapacity: 6
+    totalReserveAmmo: 100
+  - weaponType: 4
+    shootType: 1
+    fireRate: 1
+    burstActive: 0
+    bulletsInMagazine: 6
+    magazineCapacity: 6
+    totalReserveAmmo: 100
   maxSlots: 5
 --- !u!114 &1746550278
 MonoBehaviour:

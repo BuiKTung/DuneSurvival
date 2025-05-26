@@ -69,10 +69,10 @@ namespace _Game.Scripts.Gameplay.Weapon
             {
                 ContactPoint contact = collision.contacts[0];
 
-                GameObject newImpactFx =
-                    Instantiate(bulletImpactFX, contact.point, Quaternion.LookRotation(contact.normal));
-
-                Destroy(newImpactFx, 1f);
+                GameObject newImpactFx = ObjectPool.Instance.GetObject(bulletImpactFX);
+                newImpactFx.transform.position = contact.point;
+                
+                ObjectPool.Instance.ReturnToPoolWaitASecond(newImpactFx,1f);
             }
         }
     }

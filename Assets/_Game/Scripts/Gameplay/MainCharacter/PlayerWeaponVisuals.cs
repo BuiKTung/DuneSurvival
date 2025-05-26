@@ -59,22 +59,22 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         public void PlayReloadAnimation()
         {
             float reloadSpeed = player.weapon.CurrentWeapon().reloadSpeed;
-            anim.SetTrigger(Constant.Reload);
-            anim.SetFloat(Constant.ReloadSpeed, reloadSpeed);
+            anim.SetTrigger(Constant.AnimationParameter.Reload);
+            anim.SetFloat(Constant.AnimationParameter.ReloadSpeed, reloadSpeed);
             ReduceRigWeight();
         }
-        public void PlayerFireAnimation() => anim.SetTrigger(Constant.Fire);
+        public void PlayerFireAnimation() => anim.SetTrigger(Constant.AnimationParameter.Fire);
         public void PlayWeaponEquipAnimation()
         {
             EquipType equipType = CurrentWeaponModel().equipType;
 
-            float equipSpeed = player.weapon.CurrentWeapon().equipSpeed;
+            float equipSpeed = player.weapon.CurrentWeapon().equipmentSpeed;
             
             leftHandIK.weight = 0;
             ReduceRigWeight();
-            anim.SetFloat(Constant.EquipType, ((float)equipType));
-            anim.SetTrigger(Constant.EquipWeapon);
-            anim.SetFloat(Constant.EquipSpeed, equipSpeed);
+            anim.SetFloat(Constant.AnimationParameter.EquipType, ((float)equipType));
+            anim.SetTrigger(Constant.AnimationParameter.EquipWeapon);
+            anim.SetFloat(Constant.AnimationParameter.EquipSpeed, equipSpeed);
         }
         public void SwitchOnCurrentWeaponModel()
         {

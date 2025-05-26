@@ -5,7 +5,7 @@ namespace _Game.Scripts.Gameplay.Weapon
 {
     public class ItemPickup : MonoBehaviour
     {
-        [SerializeField] private Weapon weapon;
+        [SerializeField] private Weapon_Data weapon;
         private void OnTriggerEnter(Collider other)
         {
             other.GetComponent<PlayerWeaponController>()?.PickUpWeapon(weapon);
