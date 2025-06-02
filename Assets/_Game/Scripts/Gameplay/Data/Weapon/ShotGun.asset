@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponType: 3
   reloadSpeed: 1
   equipmentSpeed: 1
-  gunDistance: 5
+  gunDistance: 4
   cameraDistance: 6
   bulletsInMagazine: 6
   magazineCapacity: 6
@@ -25,10 +25,10 @@ MonoBehaviour:
   bulletsPerShot: 1
   fireRate: 2
   burstAvalible: 1
-  burstActive: 0
-  burstBulletsPerShot: 5
-  burstFireRate: 2
-  burstFireDelay: 0.1
-  baseSpread: 0
-  maxSpread: 0
+  burstActive: 1
+  burstBulletsPerShot: 6
+  burstFireRate: 6
+  burstFireDelay: 0
+  baseSpread: 10
+  maxSpread: 15
   spreadIncreaseRate: 0.15

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts.Core;
+using _Game.Scripts.Utilities.Object_Pooling;
 using UnityEngine;
 
 namespace _Game.Scripts.Utilities
@@ -11,10 +13,23 @@ namespace _Game.Scripts.Utilities
         [SerializeField] private int poolSize = 10;
         
         private Dictionary<GameObject, Queue<GameObject>> poolDictionary = new Dictionary<GameObject, Queue<GameObject>>();
+        
+        [Header("Weapon Pickup Prefab")]
+        [SerializeField] private GameObject weaponPickupPrefab;
+        [SerializeField] private GameObject ammoPickupPrefab;
+
+        private void Start()
+        {
+            InitializeNewPool(weaponPickupPrefab);
+            InitializeNewPool(ammoPickupPrefab);
+        }
+
         public GameObject GetObject(GameObject prefab)
         {
-            if(poolDictionary.ContainsKey(prefab) == false || poolDictionary[prefab].Count == 0)
+            if(poolDictionary.ContainsKey(prefab) == false)
                 InitializeNewPool(prefab);
+            if (poolDictionary[prefab].Count == 0)
+                CreateNewObject(prefab);
             
             GameObject objectToGet = poolDictionary[prefab].Dequeue();
             objectToGet.SetActive(true);
@@ -41,6 +56,7 @@ namespace _Game.Scripts.Utilities
             poolDictionary[originalPrefab].Enqueue(ObjectToReturn);
             ObjectToReturn.transform.SetParent(transform);
         }
+        //change prefab to type
         private void InitializeNewPool(GameObject prefab)
         {
             poolDictionary[prefab] = new Queue<GameObject>();
@@ -49,7 +65,7 @@ namespace _Game.Scripts.Utilities
                 CreateNewObject(prefab);
             }
         }
-
+        
         private void CreateNewObject(GameObject prefab)
         {
             GameObject newObject = Instantiate(prefab, transform);

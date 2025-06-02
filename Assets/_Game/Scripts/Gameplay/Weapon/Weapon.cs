@@ -8,13 +8,14 @@ namespace _Game.Scripts.Gameplay.Weapon
    public class Weapon
    {
       public WeaponType weaponType;
+      public Weapon_Data WeaponData { get; private set; }
       #region Regular mode variables
-       public ShootType shootType;
-       public int bulletsPerShot { get; private set; }
-       private float defaultFireRate;
-       public float fireRate = 1; // bullets per second
-       private float lastShootTime;
-       #endregion
+      public ShootType shootType;
+      public int bulletsPerShot { get; private set; }
+      private float defaultFireRate;
+      public float fireRate = 1; // bullets per second
+      private float lastShootTime;
+      #endregion
       #region Burst mode  variables
       private bool burstAvalible;
       public bool burstActive;
@@ -34,7 +35,7 @@ namespace _Game.Scripts.Gameplay.Weapon
        public float reloadSpeed { get; private set; } // how fast charcater reloads weapon    
        public float equipmentSpeed { get; private set; } // how fast character equips weapon
        public float gunDistance { get; private set; }
-       public float cameraDistance { get; private set; }
+       public float cameraDistance {get; private set;} 
        #endregion
        #region Weapon spread variables
        [Header("Spread ")] 
@@ -48,7 +49,6 @@ namespace _Game.Scripts.Gameplay.Weapon
        private float spreadCooldown = 1;
 
        #endregion
-
        public Weapon(Weapon_Data weaponData)
        {
 
@@ -56,19 +56,24 @@ namespace _Game.Scripts.Gameplay.Weapon
            magazineCapacity = weaponData.magazineCapacity;
            totalReserveAmmo = weaponData.totalReserveAmmo;
 
-           fireRate = weaponData.fireRate;
            weaponType = weaponData.weaponType;
-
-           bulletsPerShot = weaponData.bulletsPerShot;
            shootType = weaponData.shootType;
-
-
            burstAvalible = weaponData.burstAvalible;
            burstActive = weaponData.burstActive;
            burstBulletsPerShot = weaponData.burstBulletsPerShot;
            burstFireRate = weaponData.burstFireRate;
            burstFireDelay = weaponData.burstFireDelay;
-
+           if (weaponType == WeaponType.Shotgun)
+           {
+              bulletsPerShot = burstBulletsPerShot;
+              fireRate = burstFireRate;
+              burstFireDelay = 0;
+           }
+           else
+           {
+              bulletsPerShot = weaponData.bulletsPerShot;
+              fireRate = weaponData.fireRate;
+           }
 
            baseSpread = weaponData.baseSpread;
            maximumSpread = weaponData.maxSpread;
@@ -80,9 +85,8 @@ namespace _Game.Scripts.Gameplay.Weapon
            gunDistance = weaponData.gunDistance;
            cameraDistance = weaponData.cameraDistance;
 
-           
-
            defaultFireRate = fireRate;
+           this.WeaponData = weaponData;
        }
       public void ReduceBulletsInMagazine()
       {
@@ -117,7 +121,6 @@ namespace _Game.Scripts.Gameplay.Weapon
       {
          if (weaponType == WeaponType.Shotgun)
          {
-            burstFireDelay = 0;
             return true;
          }
          return burstActive;

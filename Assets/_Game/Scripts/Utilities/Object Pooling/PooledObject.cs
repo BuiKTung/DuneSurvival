@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PooledObject : MonoBehaviour
+namespace _Game.Scripts.Utilities.Object_Pooling
 {
-   public GameObject originalPrefab{ get; set; }
+   public class PooledObject : MonoBehaviour
+   {
+      public GameObject originalPrefab;
+   }
 }

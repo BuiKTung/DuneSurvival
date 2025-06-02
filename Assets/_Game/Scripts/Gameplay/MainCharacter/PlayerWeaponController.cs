@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts.Gameplay.Interactables;
 using _Game.Scripts.Gameplay.Weapon;
 using _Game.Scripts.Systems;
 using _Game.Scripts.Utilities;
@@ -16,8 +17,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         //This is the default speed from whcih our mass formula is derived.
         [SerializeField] private Weapon_Data defaultWeaponData;
         [SerializeField] private Weapon.Weapon currentWeapon;
-        [SerializeField]private bool weaponReady;
-        [SerializeField]private bool isShooting;
+        [SerializeField] private bool weaponReady;
+        [SerializeField] private bool isShooting;
         
         [Header("Bullet details")]
         [SerializeField] private GameObject bulletPrefab;
@@ -27,6 +28,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         [Header("Inventory")] 
         [SerializeField] private List<Weapon.Weapon> weaponSlots;
         [SerializeField] private int maxSlots;
+        
+        [SerializeField] private GameObject weaponPickupPrefab;
         
         private void Start()
         {
@@ -81,7 +84,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             for (int i = 0; i < currentWeapon.bulletsPerShot; i++)
             {
                 FireSingleBullet();
-                 yield return new WaitForSeconds(currentWeapon.burstFireDelay);
+                yield return new WaitForSeconds(currentWeapon.burstFireDelay);
             }
             SetWeaponReady(true);
         }
@@ -138,27 +141,42 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             CameraManager.Instance.ChangeCameraDistance(currentWeapon.cameraDistance);
         }
 
-        public void PickUpWeapon(Weapon_Data newWeaponData)
+        public void PickUpWeapon(Weapon.Weapon newWeapon)
         {
-            if (weaponSlots.Count >= maxSlots)
+            if (WeaponInSlots(newWeapon.weaponType) != null)
             {
+                WeaponInSlots(newWeapon.weaponType).totalReserveAmmo += newWeapon.bulletsInMagazine;
+                return;
+            }
+            
+            if (weaponSlots.Count >= maxSlots && newWeapon.weaponType != currentWeapon.weaponType)
+            {
+                int weaponIndex = weaponSlots.IndexOf(currentWeapon);
+                weaponSlots[weaponIndex] = newWeapon;
+                
+                CreateWeaponOnTheGround();
+                EquipWeapon(weaponIndex);
                 return;
             }
 
-            Weapon.Weapon newWeapon = new Weapon.Weapon(newWeaponData);
             
             weaponSlots.Add(newWeapon);
             player.weaponVisuals.SwitchOnBackupWeaponModel();
         }
-        /// <summary>
-        /// !!!bug!!!: not show weapon 
-        /// </summary>
         private void DropWeapon()
         {
             if(weaponSlots.Count <= 1){return;}
 
+            CreateWeaponOnTheGround();
+
             weaponSlots.Remove(currentWeapon);
             EquipWeapon(0);
+        }
+
+        private void CreateWeaponOnTheGround()
+        {
+            GameObject droppedWeapon = ObjectPool.Instance.GetObject(weaponPickupPrefab);
+            droppedWeapon.GetComponent<PickupWeapon>()?.SetupPickupWeapon(currentWeapon, transform);
         }
 
         public void SetWeaponReady(bool ready) => weaponReady = ready;

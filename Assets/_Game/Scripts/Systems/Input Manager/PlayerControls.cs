@@ -134,6 +134,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""eea1a2a9-151e-4957-9bd9-c0b7a7a4444b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +321,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Toogle Weapon Mode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96190b43-1c36-477a-b152-59442b999358"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -332,6 +352,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Character_Drop = m_Character.FindAction("Drop", throwIfNotFound: true);
         m_Character_Reload = m_Character.FindAction("Reload", throwIfNotFound: true);
         m_Character_ToogleWeaponMode = m_Character.FindAction("Toogle Weapon Mode", throwIfNotFound: true);
+        m_Character_Interact = m_Character.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -405,6 +426,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Character_Drop;
     private readonly InputAction m_Character_Reload;
     private readonly InputAction m_Character_ToogleWeaponMode;
+    private readonly InputAction m_Character_Interact;
     public struct CharacterActions
     {
         private @PlayerControls m_Wrapper;
@@ -421,6 +443,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Drop => m_Wrapper.m_Character_Drop;
         public InputAction @Reload => m_Wrapper.m_Character_Reload;
         public InputAction @ToogleWeaponMode => m_Wrapper.m_Character_ToogleWeaponMode;
+        public InputAction @Interact => m_Wrapper.m_Character_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -466,6 +489,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ToogleWeaponMode.started += instance.OnToogleWeaponMode;
             @ToogleWeaponMode.performed += instance.OnToogleWeaponMode;
             @ToogleWeaponMode.canceled += instance.OnToogleWeaponMode;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(ICharacterActions instance)
@@ -506,6 +532,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ToogleWeaponMode.started -= instance.OnToogleWeaponMode;
             @ToogleWeaponMode.performed -= instance.OnToogleWeaponMode;
             @ToogleWeaponMode.canceled -= instance.OnToogleWeaponMode;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(ICharacterActions instance)
@@ -537,5 +566,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDrop(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnToogleWeaponMode(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

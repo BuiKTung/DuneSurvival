@@ -17,12 +17,5 @@ namespace _Game.Scripts.Utilities
             public const string EquipSpeed = "EquipSpeed";
             public const string BusyEquipingWeapon = "BusyEquipingWeapon";
         }
-
-        public static class PoolName
-        {
-            public const string BulletPool = "Bullet";
-            public const string EffectPool = "ImpactFx";
-            // Add more pool names here
-        }
     }
 }
