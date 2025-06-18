@@ -16,6 +16,7 @@ namespace _Game.Scripts.Gameplay.Weapon
         private float flyDistance;
         private bool bulletDisabled;
         
+        public float impactForce;
         private void Update()
         {
             FadeTrailIfNeeded();
@@ -48,8 +49,9 @@ namespace _Game.Scripts.Gameplay.Weapon
             }
         }
 
-        public void BulletSetup(float flyDistance)
+        public void BulletSetup(float flyDistance, float impactForce)
         {
+            this.impactForce = impactForce;
             bulletDisabled = false;
             cd.enabled = true;
             meshRenderer.enabled = true;
@@ -61,6 +63,23 @@ namespace _Game.Scripts.Gameplay.Weapon
         {
             CreateImpactFx(collision);
             ObjectPool.Instance.ReturnToPool(gameObject);
+            
+            Enemy.Enemy enemy = CacheComponent<Enemy.Enemy>.CacheGetComponentInParent(collision.gameObject);
+            EnemyShield shield = CacheComponent<EnemyShield>.CacheGetComponent(collision.gameObject);
+            
+            if (shield != null )
+            {
+                shield.ReduceDurability();
+                return;
+            }
+            
+            if (enemy != null)
+            {
+                Vector3 force = rb.velocity.normalized * impactForce;
+                Rigidbody hitRigidbody = collision.collider.attachedRigidbody;
+                enemy.GetHit();
+                enemy.DeathImpact(force, collision.contacts[0].point, hitRigidbody );
+            }
         }
 
         private void CreateImpactFx(Collision collision)

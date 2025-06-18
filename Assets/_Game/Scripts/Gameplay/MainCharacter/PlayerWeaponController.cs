@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts.Gameplay.Enemy;
 using _Game.Scripts.Gameplay.Interactables;
 using _Game.Scripts.Gameplay.Weapon;
 using _Game.Scripts.Systems;
@@ -24,6 +24,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private float bulletSpeed;
         [SerializeField] private Transform weaponHolder;
+        [SerializeField] private float impactForce = 400f;
 
         [Header("Inventory")] 
         [SerializeField] private List<Weapon.Weapon> weaponSlots;
@@ -58,6 +59,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 StartCoroutine(BurstFire());
             else
                 FireSingleBullet();
+
+            TriggerEnemyDodge();
             currentWeapon.ReduceBulletsInMagazine();
             player.weaponVisuals.PlayerFireAnimation();
         }
@@ -71,7 +74,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             Rigidbody rbNewBullet = newBullet.GetComponent<Rigidbody>();
             
             Bullet bulletScript = newBullet.GetComponent<Bullet>();
-            bulletScript.BulletSetup(currentWeapon.gunDistance);
+            
+            bulletScript.BulletSetup(currentWeapon.gunDistance, impactForce);
             
             Vector3 bulletDirection = currentWeapon.ApplySpread(BulletDirection());
             rbNewBullet.mass = REFERENCE_BULLET_SPEED / bulletSpeed;
@@ -105,7 +109,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             
             return direction;
         }
-
+        
         public Transform GunPoint() => player.weaponVisuals.CurrentWeaponModel().gunPoint;
         public Weapon.Weapon CurrentWeapon() => currentWeapon;
         
@@ -119,6 +123,22 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                     return weapon;
             }
             return null;
+        }
+
+        private void TriggerEnemyDodge()
+        {
+            Vector3 rayOrigin = GunPoint().position;
+            Vector3 rayDirection = BulletDirection();
+
+            if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit raycastHit, Mathf.Infinity))
+            {
+                Enemy_Melee enemyMelee = raycastHit.collider.gameObject.GetComponentInParent<Enemy_Melee>();
+
+                if (enemyMelee != null)
+                {
+                    enemyMelee.ActivateDodge();
+                }
+            }
         }
         #region SlotsManagement - Pickup/Equip/Drop/Ready/... Weapon
         
@@ -187,16 +207,16 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private void AssignInputEvents()
         {
             PlayerControls controls = player.controls;
-            controls.Character.Fire.performed += context => isShooting = true;
-            controls.Character.Fire.canceled += context => isShooting = false;
-            controls.Character.EquipSlot1.performed += context => EquipWeapon(0);
-            controls.Character.EquipSlot2.performed += context => EquipWeapon(1);
-            controls.Character.EquipSlot3.performed += context => EquipWeapon(2);
-            controls.Character.EquipSlot4.performed += context => EquipWeapon(3);
-            controls.Character.EquipSlot5.performed += context => EquipWeapon(4);
-            controls.Character.Drop.performed += context => DropWeapon();
-            controls.Character.ToogleWeaponMode.performed += context => currentWeapon.ToggleBurst();
-            controls.Character.Reload.performed += context => 
+            controls.Character.Fire.performed += _ => isShooting = true;
+            controls.Character.Fire.canceled += _ => isShooting = false;
+            controls.Character.EquipSlot1.performed += _ => EquipWeapon(0);
+            controls.Character.EquipSlot2.performed += _ => EquipWeapon(1);
+            controls.Character.EquipSlot3.performed += _ => EquipWeapon(2);
+            controls.Character.EquipSlot4.performed += _ => EquipWeapon(3);
+            controls.Character.EquipSlot5.performed += _ => EquipWeapon(4);
+            controls.Character.Drop.performed += _ => DropWeapon();
+            controls.Character.ToogleWeaponMode.performed += _ => currentWeapon.ToggleBurst();
+            controls.Character.Reload.performed += _ => 
             {
                 if (currentWeapon.CanReload())
                 {

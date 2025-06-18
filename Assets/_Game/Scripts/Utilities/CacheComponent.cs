@@ -16,10 +16,24 @@ namespace _Game.Scripts.Utilities
             }
             return component;
         }
+        public static T CacheGetComponentInParent(GameObject gameObject)
+        {
+            if (!Caches.TryGetValue(gameObject, out var component))
+            {
+                component = gameObject.GetComponentInParent<T>();
+                Caches[gameObject] = component;
+            }
+            return component;
+        }
 
         public static void ClearCaches(GameObject gameObject)
         {
             Caches.Remove(gameObject);
+        }
+
+        public static void ClearAllCaches()
+        {
+            Caches.Clear();
         }
     }
 }

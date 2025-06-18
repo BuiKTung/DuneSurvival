@@ -16,6 +16,26 @@ namespace _Game.Scripts.Utilities
             public const string EquipWeapon = "EquipWeapon";
             public const string EquipSpeed = "EquipSpeed";
             public const string BusyEquipingWeapon = "BusyEquipingWeapon";
+
+            #region EnemyParameter
+
+            public const string IdleState = "Idle";
+            public const string MoveState = "Move";
+            public const string ChaseState = "Chase";
+            public const string RecoveryState = "Recovery";
+            public const string AttackState = "Attack";
+            public const string DeadState = "Dead";
+            public const string Dodge = "Dodge";
+            
+            public const string AttackAnimationSpeed = "AttackAnimationSpeed";
+            public const string AttackIndex = "AttackIndex";
+            public const string ChaseIndex = "ChaseIndex";
+            public const string RecoveryIndex = "RecoveryIndex";
+            public const string SlashAttackIndex = "SlashAttackIndex";
+            
+            public const int SlashAttackCount = 6;
+
+            #endregion
         }
     }
 }
