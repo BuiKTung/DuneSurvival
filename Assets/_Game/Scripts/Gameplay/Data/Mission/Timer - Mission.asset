@@ -16,4 +16,4 @@ MonoBehaviour:
   missionDescription: Your scanners detected upcoming sandstorm.You have less than
     15 minutes to reach the airplane before the conditions become untenable for a
     safe takeoff.
-  time: 6
+  time: 300

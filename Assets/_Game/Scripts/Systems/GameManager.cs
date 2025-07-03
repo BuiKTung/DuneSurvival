@@ -70,7 +70,7 @@ namespace _Game.Scripts.Systems
         }
         public void GameCompleted()
         {
-            UI.UI.Instance.ShowVictoryScreenUI();
+            ChangeState(GameState.Victory);
             player.health.currentHealth += 99999; 
             // So player won't die in last second.
         }

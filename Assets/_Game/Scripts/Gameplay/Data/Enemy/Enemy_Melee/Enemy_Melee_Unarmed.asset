@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackData:
   - attackName: Flying kick
+    attackDamage: 1
     attackRange: 2
     moveSpeed: 5
     attackIndex: 0
     animationSpeed: 1.011
     AttackType: 1
   - attackName: Boxin attack
+    attackDamage: 1
     attackRange: 1
     moveSpeed: 0
     attackIndex: 1

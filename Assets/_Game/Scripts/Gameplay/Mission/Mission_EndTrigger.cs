@@ -1,3 +1,4 @@
+using _Game.Scripts.Systems;
 using UnityEngine;
 
 namespace _Game.Scripts.Gameplay.Mission
@@ -16,8 +17,11 @@ namespace _Game.Scripts.Gameplay.Mission
             if (other.gameObject != player)
                 return;
 
-            if(MissionManager.Instance.MissionCompleted())
+            if (MissionManager.Instance.MissionCompleted())
+            {
+                GameManager.Instance.GameCompleted();
                 Debug.Log("Level completed!");
+            }
         }
     }
 }

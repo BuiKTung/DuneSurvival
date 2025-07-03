@@ -449,7 +449,7 @@ MonoBehaviour:
   - {fileID: 6419644135164138300}
   - {fileID: 8108598434274817978}
   - {fileID: 2723908896651368166}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &643215505250568130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,7 +2624,7 @@ MonoBehaviour:
   - {fileID: 1740583494234588555}
   damagePoints:
   - {fileID: 2575490998373931486}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &3382767520927902690
 GameObject:
   m_ObjectHideFlags: 0
@@ -2859,7 +2859,7 @@ MonoBehaviour:
   - {fileID: 3298137411470075517}
   damagePoints:
   - {fileID: 1612120020220918312}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &3538617717933815349
 GameObject:
   m_ObjectHideFlags: 0
@@ -3002,7 +3002,7 @@ MonoBehaviour:
   - {fileID: 8776655725798300856}
   damagePoints:
   - {fileID: 4780221344448151789}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &3657297280799591784
 GameObject:
   m_ObjectHideFlags: 0
@@ -4339,7 +4339,7 @@ MonoBehaviour:
   - {fileID: 6366265014452867597}
   damagePoints:
   - {fileID: 7188787691674947160}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &5131998989182202375
 GameObject:
   m_ObjectHideFlags: 0
@@ -5300,7 +5300,7 @@ MonoBehaviour:
   - {fileID: 5925470642679006084}
   damagePoints:
   - {fileID: 7611558608461553617}
-  attackRadius: 0.25
+  attackRadius: 0.3
 --- !u!1 &6245389842131386964
 GameObject:
   m_ObjectHideFlags: 0
