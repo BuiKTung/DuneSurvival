@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponName: Revolver
   weaponIcon: {fileID: 1440921872, guid: 3477fe9a26e0faa42b5a9b5b258229c1, type: 3}
   weaponInfo: Strong gun like a cowboy
+  bulletDamage: 2
   weaponType: 1
   reloadSpeed: 1
   equipmentSpeed: 1
