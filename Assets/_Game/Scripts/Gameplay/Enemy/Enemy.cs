@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
+using _Game.Scripts.Gameplay.Enemy.StateMachine;
+using _Game.Scripts.Gameplay.Health;
 using _Game.Scripts.Gameplay.MainCharacter;
+using _Game.Scripts.Gameplay.Mission;
+using _Game.Scripts.Utilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,10 +12,18 @@ using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Gameplay.Enemy
 {
+    public enum EnemyType
+    {
+        Melee, 
+        Ranged,
+        Boss,
+        Random
+    }
     public class Enemy : MonoBehaviour
     {
-        [Header("Health data")] 
-        [SerializeField]protected int healthPoint;
+        public EnemyType enemyType;
+        public LayerMask whatIsAlly;
+        public LayerMask whatIsPlayer;
         
         [Header("Idle data")] 
         public float idleTime;
@@ -26,29 +38,66 @@ namespace _Game.Scripts.Gameplay.Enemy
         
         public Transform[] patrolPoints;
         private Vector3[] patrolPositions;
-        public bool inBattleMode { get; private set; }
         private int currentPatrolIndex;
+        protected bool inBattleMode { get; private set; }
+        protected bool isMeleeAttackReady;
+
         public Player player { get; private set; }
         public NavMeshAgent agent { get; private set; }
         public EnemyStateMachine stateMachine { get; private set; }
+        public Enemy_Health health { get; private set; }
+        public Enemy_DropController dropController { get; private set; }
         public Animator anim { get; private set; }
+        
         public NavMeshPath cachedPath;
+        
         protected virtual void Awake()
         {
             stateMachine = new EnemyStateMachine();
             agent = GetComponent<NavMeshAgent>();
+            health = GetComponent<Enemy_Health>();
             anim = GetComponentInChildren<Animator>();
+            dropController = GetComponent<Enemy_DropController>();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
         protected virtual void Start()
         {
             InitalizePatrolPoints();
             cachedPath = new NavMeshPath();
-            
         }
         protected virtual void Update()
         {
         }
+        public virtual void MeleeAttackCheck(Transform[] damagePoints, float attackCheckRadius,GameObject fx,int damage)
+        {
+            if (isMeleeAttackReady == false)
+                return;
+
+            foreach (Transform attackPoint in damagePoints)
+            {
+                Collider[] detectedHits =
+                    Physics.OverlapSphere(attackPoint.position, attackCheckRadius, whatIsPlayer);
+
+
+                for (int i = 0; i < detectedHits.Length; i++)
+                {
+                    IDamagable damagable = detectedHits[i].GetComponent<IDamagable>();
+
+                    if (damagable != null)
+                    {
+
+                        damagable.TakeDamage(damage);
+                        isMeleeAttackReady = false;
+                        GameObject newAttackFx = ObjectPool.Instance.GetObject(fx, attackPoint);
+
+                        ObjectPool.Instance.ReturnToPoolWaitASecond(newAttackFx, 1);
+                        return;
+                    }
+                }
+
+            }
+        }
+        public void EnableMeleeAttackCheck(bool enable) => isMeleeAttackReady = enable;
         public bool PlayerInAggresionRange() => Vector3.Distance(transform.position, player.transform.position) <= aggresionRange;
         protected bool ShouldEnterBattleMode()
         {
@@ -62,24 +111,37 @@ namespace _Game.Scripts.Gameplay.Enemy
 
             return false;
         }
-        public virtual void EnterBattleMode()
+
+        protected virtual void EnterBattleMode()
         {
             inBattleMode = true;
         }
-        public virtual void GetHit()
+        public virtual void GetHit(int damage)
         {
+            health.ReduceHealth(damage);
+            if (health.ShouldDie())
+                Die();
             EnterBattleMode();
-            healthPoint--;
         }
-        public virtual void DeathImpact(Vector3 force, Vector3 hitpoint, Rigidbody rb)
+
+        protected virtual void Die()
         {
-            StartCoroutine(DeathImpactCoroutine(force, hitpoint, rb));
+            dropController.DropItems();
+
+            MissionObject_HuntTarget huntTarget = GetComponent<MissionObject_HuntTarget>();
+            huntTarget?.InvokeOnTargetKilled();
+        }
+        public virtual void BulletImpact(Vector3 force, Vector3 hitpoint, Rigidbody rb)
+        {
+            if(health.ShouldDie())
+                StartCoroutine(DeathImpactCoroutine(force,hitpoint,rb));
+            //StartCoroutine(DeathImpactCoroutine(force, hitpoint, rb));
         }
 
         private IEnumerator DeathImpactCoroutine(Vector3 force, Vector3 hitpoint, Rigidbody rb)
         {
             yield return new WaitForSeconds(0.1f);
-            rb.AddForce(force, ForceMode.Impulse);
+            rb.AddForceAtPosition(force, hitpoint, ForceMode.Impulse);
         }
         public void FaceTarget(Vector3 target)
         {
@@ -125,6 +187,20 @@ namespace _Game.Scripts.Gameplay.Enemy
         protected virtual void OnDrawGizmos()
         {
             Gizmos.DrawWireSphere(transform.position, aggresionRange);
+        }
+
+        public void MakeEnemyVip()
+        {
+            int additionalHealth = Mathf.RoundToInt(health.currentHealth * 1.5f);
+            health.currentHealth += additionalHealth;
+            
+            transform.localScale = transform.localScale * 1.5f;
+        }
+
+        public void EnemyInLastDefendMisson(Vector3 defencePoint)
+        {
+            agent.SetDestination(defencePoint);
+            aggresionRange = 100;
         }
     }
 }

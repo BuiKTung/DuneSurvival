@@ -8,6 +8,9 @@ namespace _Game.Scripts.Gameplay.Weapon
    public class Weapon
    {
       public WeaponType weaponType;
+      
+      public int bulletDamage;
+      
       public Weapon_Data WeaponData { get; private set; }
       #region Regular mode variables
       public ShootType shootType;
@@ -51,6 +54,7 @@ namespace _Game.Scripts.Gameplay.Weapon
        #endregion
        public Weapon(Weapon_Data weaponData)
        {
+           bulletDamage = weaponData.bulletDamage;
 
            bulletsInMagazine = weaponData.bulletsInMagazine;
            magazineCapacity = weaponData.magazineCapacity;

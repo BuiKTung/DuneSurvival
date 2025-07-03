@@ -1,3 +1,4 @@
+using _Game.Scripts.Gameplay.Health;
 using _Game.Scripts.Utilities;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace _Game.Scripts.Gameplay.Weapon
         private bool bulletDisabled;
         
         public float impactForce;
+        private int bulletDamage;
         private void Update()
         {
             FadeTrailIfNeeded();
@@ -49,22 +51,22 @@ namespace _Game.Scripts.Gameplay.Weapon
             }
         }
 
-        public void BulletSetup(float flyDistance, float impactForce)
+        public void BulletSetup(int bulletDamage, float flyDistance = 100, float impactForce = 100)
         {
             this.impactForce = impactForce;
+            this.bulletDamage = bulletDamage;
             bulletDisabled = false;
             cd.enabled = true;
             meshRenderer.enabled = true;
             trailRenderer.time = .25f;
             startPosition = transform.position;
-            this.flyDistance = flyDistance;
+            this.flyDistance = flyDistance + .5f;
         }
         private void OnCollisionEnter(Collision collision)
         {
-            CreateImpactFx(collision);
+            CreateImpactFx();
             ObjectPool.Instance.ReturnToPool(gameObject);
             
-            Enemy.Enemy enemy = CacheComponent<Enemy.Enemy>.CacheGetComponentInParent(collision.gameObject);
             EnemyShield shield = CacheComponent<EnemyShield>.CacheGetComponent(collision.gameObject);
             
             if (shield != null )
@@ -73,26 +75,25 @@ namespace _Game.Scripts.Gameplay.Weapon
                 return;
             }
             
+            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+            damagable?.TakeDamage(bulletDamage);
+            ApplyBulletImpactToEnemy(collision);
+        }
+        private void ApplyBulletImpactToEnemy(Collision collision)
+        {
+            Enemy.Enemy enemy = CacheComponent<Enemy.Enemy>.CacheGetComponentInParent(collision.gameObject);
             if (enemy != null)
             {
                 Vector3 force = rb.velocity.normalized * impactForce;
                 Rigidbody hitRigidbody = collision.collider.attachedRigidbody;
-                enemy.GetHit();
-                enemy.DeathImpact(force, collision.contacts[0].point, hitRigidbody );
+                enemy.BulletImpact(force, collision.contacts[0].point, hitRigidbody);
             }
         }
 
-        private void CreateImpactFx(Collision collision)
+        private void CreateImpactFx()
         {
-            if (collision.contacts.Length > 0)
-            {
-                ContactPoint contact = collision.contacts[0];
-
-                GameObject newImpactFx = ObjectPool.Instance.GetObject(bulletImpactFX);
-                newImpactFx.transform.position = contact.point;
-                
+                GameObject newImpactFx = ObjectPool.Instance.GetObject(bulletImpactFX,transform);
                 ObjectPool.Instance.ReturnToPoolWaitASecond(newImpactFx,1f);
-            }
         }
     }
 }

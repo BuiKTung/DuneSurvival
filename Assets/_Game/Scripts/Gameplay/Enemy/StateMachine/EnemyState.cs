@@ -1,20 +1,20 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace _Game.Scripts.Gameplay.Enemy
+namespace _Game.Scripts.Gameplay.Enemy.StateMachine
 {
-    public abstract class EnemyState 
+    public class EnemyState : IState
     {
         protected Enemy enemyBase;
         protected EnemyStateMachine stateMachine;
-        
-        protected string animBoolName;
+
+        private string animBoolName;
         
         protected float stateTimer;
 
         protected bool triggerCalled;
 
-        public EnemyState(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName)
+        protected EnemyState(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName)
         {
             this.enemyBase = enemyBase;
             this.stateMachine = stateMachine;
@@ -35,9 +35,8 @@ namespace _Game.Scripts.Gameplay.Enemy
             enemyBase.anim.SetBool(animBoolName, false);
         }
         public void AnimationTrigger() => triggerCalled = true;
-        public virtual void AbilityTrigger()
+        public virtual void AbilityTrigger() 
         {
-
         }
         protected Vector3 GetNextPathPoint()
         {

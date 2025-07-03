@@ -5,7 +5,6 @@ using _Game.Scripts.Gameplay.Enemy;
 using _Game.Scripts.Utilities;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
-using Constant = _Game.Scripts.Utilities.Constant;
 
 public class EnemyShield : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class EnemyShield : MonoBehaviour
         durability--;
         if (durability <= 0)
         {
-            enemy.anim.SetFloat(Constant.AnimationParameter.ChaseIndex, 0);
+            enemy.anim.SetFloat(ConstantString.AnimationParameter.ChaseIndex, 0);
             CacheComponent<EnemyShield>.ClearCaches(gameObject);
             gameObject.SetActive(false);
         }

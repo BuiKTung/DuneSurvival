@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts.Gameplay.Enemy;
@@ -6,6 +7,7 @@ using _Game.Scripts.Gameplay.Weapon;
 using _Game.Scripts.Systems;
 using _Game.Scripts.Utilities;
 using UnityEngine;
+using Constant = Unity.Burst.CompilerServices.Constant;
 
 
 namespace _Game.Scripts.Gameplay.MainCharacter
@@ -15,7 +17,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         private Player player;
         private const float REFERENCE_BULLET_SPEED = 20;
         //This is the default speed from whcih our mass formula is derived.
-        [SerializeField] private Weapon_Data defaultWeaponData;
+        [SerializeField] private List<Weapon_Data> defaultWeaponData;
         [SerializeField] private Weapon.Weapon currentWeapon;
         [SerializeField] private bool weaponReady;
         [SerializeField] private bool isShooting;
@@ -32,11 +34,11 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         
         [SerializeField] private GameObject weaponPickupPrefab;
         
+        public static Action<string> OnWeaponUsed;
         private void Start()
         {
             player = GetComponent<Player>();
             AssignInputEvents();
-            Invoke(nameof(EquipStartingWeapon),1f);
             currentWeapon.bulletsInMagazine = currentWeapon.totalReserveAmmo;
         }
 
@@ -55,6 +57,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
             if(currentWeapon.shootType == ShootType.Single)
                 isShooting = false;
+            
             if(currentWeapon.BurstActivated() == true)
                 StartCoroutine(BurstFire());
             else
@@ -62,20 +65,22 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
             TriggerEnemyDodge();
             currentWeapon.ReduceBulletsInMagazine();
+            UpdateWeaponUI();
             player.weaponVisuals.PlayerFireAnimation();
+            OnWeaponUsed?.Invoke(ConstantString.AnimationParameter.Fire);
         }
 
         private void FireSingleBullet()
         {
-            GameObject newBullet = ObjectPool.Instance.GetObject(bulletPrefab);
-            newBullet.transform.position = GunPoint().position;
+            GameObject newBullet = ObjectPool.Instance.GetObject(bulletPrefab,GunPoint());
+            //newBullet.transform.position = GunPoint().position;
             newBullet.transform.rotation = Quaternion.LookRotation(GunPoint().forward);
             
             Rigidbody rbNewBullet = newBullet.GetComponent<Rigidbody>();
             
             Bullet bulletScript = newBullet.GetComponent<Bullet>();
             
-            bulletScript.BulletSetup(currentWeapon.gunDistance, impactForce);
+            bulletScript.BulletSetup(currentWeapon.bulletDamage, currentWeapon.gunDistance,impactForce);
             
             Vector3 bulletDirection = currentWeapon.ApplySpread(BulletDirection());
             rbNewBullet.mass = REFERENCE_BULLET_SPEED / bulletSpeed;
@@ -96,6 +101,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             SetWeaponReady(false);
             player.weaponVisuals.PlayReloadAnimation();
+            // We UpdateWeaponUI in Player_AnimationEvents
         }
 
         public Vector3 BulletDirection()
@@ -140,11 +146,21 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 }
             }
         }
+        public void UpdateWeaponUI()
+        {
+            UI.UI.Instance.inGameUI.UpdateWeaponUI(weaponSlots, currentWeapon);
+        }
         #region SlotsManagement - Pickup/Equip/Drop/Ready/... Weapon
         
-        private void EquipStartingWeapon()
+        public void SetDefaultWeapon(List<Weapon_Data> newWeaponData)
         {
-            weaponSlots[0] = new Weapon.Weapon(defaultWeaponData);
+            defaultWeaponData = new List<Weapon_Data>(newWeaponData);
+            weaponSlots.Clear();
+
+            foreach (var weaponData in defaultWeaponData)
+            {
+                PickUpWeapon(new Weapon.Weapon(weaponData));                
+            }
             EquipWeapon(0);
         }
 
@@ -158,7 +174,9 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             currentWeapon = weaponSlots[i];
             player.weaponVisuals.PlayWeaponEquipAnimation();
 
-            CameraManager.Instance.ChangeCameraDistance(currentWeapon.cameraDistance);
+            //CameraManager.Instance.ChangeCameraDistance(currentWeapon.cameraDistance);
+
+            UpdateWeaponUI();
         }
 
         public void PickUpWeapon(Weapon.Weapon newWeapon)
@@ -179,9 +197,10 @@ namespace _Game.Scripts.Gameplay.MainCharacter
                 return;
             }
 
-            
+            UpdateWeaponUI();
             weaponSlots.Add(newWeapon);
             player.weaponVisuals.SwitchOnBackupWeaponModel();
+            
         }
         private void DropWeapon()
         {
@@ -195,7 +214,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         private void CreateWeaponOnTheGround()
         {
-            GameObject droppedWeapon = ObjectPool.Instance.GetObject(weaponPickupPrefab);
+            GameObject droppedWeapon = ObjectPool.Instance.GetObject(weaponPickupPrefab,transform);
             droppedWeapon.GetComponent<PickupWeapon>()?.SetupPickupWeapon(currentWeapon, transform);
         }
 

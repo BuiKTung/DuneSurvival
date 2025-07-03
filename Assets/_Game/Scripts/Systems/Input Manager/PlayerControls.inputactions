@@ -121,6 +121,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UI Mission ToolTip Switch",
+                    "type": "Button",
+                    "id": "7535d953-ffbc-408b-9e7e-ec3bf0ccde03",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UI Pause",
+                    "type": "Button",
+                    "id": "c4f8bcbe-72b9-4665-b34e-f118239d0898",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -308,6 +326,56 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2cb8500-bddb-4968-8546-12885a194355",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Mission ToolTip Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4d28ce2-5494-41ab-91a5-31a21e6e5fec",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "ea8911bf-2d04-40b2-a6a4-6bbefa0da5f6",
+            "actions": [
+                {
+                    "name": "UI Pause",
+                    "type": "Button",
+                    "id": "4fa8d236-21f5-496b-ad38-b178676ec3ff",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2f719a7c-2581-4b3f-9585-a9e25115605d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

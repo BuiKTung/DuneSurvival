@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55d7139f18c6a754dac197c94c6b533a, type: 3}
+  m_Name: Car delivery - Mission
+  m_EditorClassIdentifier: 
+  missionName: A Mechanical Lifeline
+  missionDescription: You need to find a functioning vehicle and deliver it to evacuation
+    spot. The parts of the vehicle can be used to repair evacuation plane.

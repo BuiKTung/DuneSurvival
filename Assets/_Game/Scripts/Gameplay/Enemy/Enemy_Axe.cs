@@ -1,11 +1,13 @@
+using _Game.Scripts.Gameplay.Health;
 using _Game.Scripts.Gameplay.MainCharacter;
 using _Game.Scripts.Gameplay.Weapon;
 using _Game.Scripts.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Gameplay.Enemy
 {
-    public class EnemyAxe : MonoBehaviour
+    public class Enemy_Axe : MonoBehaviour
     {
         [SerializeField] private Transform player;
         [SerializeField] private Rigidbody rb;
@@ -14,44 +16,53 @@ namespace _Game.Scripts.Gameplay.Enemy
         
         [SerializeField] private float flySpeed;
         [SerializeField] private float rotationSpeed;
-        [SerializeField] private float timer;
+        [SerializeField] private float aimTimer;
+        [SerializeField] private float lifeTimer;
+        [SerializeField] private float damage;
         
         [SerializeField] private Vector3 direction;
         
-        public void AxeSetup(float flySpeed, Transform player, float timer)
+        public void AxeSetup(float flySpeed, Transform player, float aimTimer, float lifeTimer, int damage)
         {
             rotationSpeed = 1600;
 
+            this.damage = damage;
             this.flySpeed = flySpeed;
             this.player = player;
-            this.timer = timer;
+            this.aimTimer = aimTimer;
+            this.lifeTimer = lifeTimer;
         }
         private void Update()
         {
             axeVisual.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
-            timer -= Time.deltaTime;
-
-            if (timer > 0)
+            
+            lifeTimer -= Time.deltaTime;
+            aimTimer -= Time.deltaTime;
+            if (aimTimer > 0)
                 direction = player.position + Vector3.up - transform.position;
-
-
-            rb.velocity = direction.normalized * flySpeed;
+            if (lifeTimer <= 0)
+                DisableAxeThrown();
+            
             transform.forward = rb.velocity;
         }
-        
-        private void OnTriggerEnter(Collider other)
+        private void FixedUpdate()
         {
-            Bullet bullet = other.GetComponent<Bullet>();
-            Player player = other.GetComponent<Player>();
+            rb.velocity = direction.normalized * flySpeed;
+        }
 
-            if (bullet != null || player != null)
-            {
-                GameObject newFx = ObjectPool.Instance.GetObject(impactFx);
-                newFx.transform.position = transform.position;
+        private void OnCollisionEnter(Collision collision)
+        {
+            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+            damagable?.TakeDamage(damage);
+            
+            DisableAxeThrown();
+        }
 
-                ObjectPool.Instance.ReturnToPool(gameObject);
-                ObjectPool.Instance.ReturnToPoolWaitASecond(newFx, 1f);
-            }
+        private void DisableAxeThrown()
+        {
+            GameObject newFx = ObjectPool.Instance.GetObject(impactFx,transform);
+            ObjectPool.Instance.ReturnToPool(gameObject);
+            ObjectPool.Instance.ReturnToPoolWaitASecond(newFx, 1f);
         }
     }
 }

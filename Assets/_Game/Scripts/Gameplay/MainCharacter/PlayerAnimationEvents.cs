@@ -1,3 +1,4 @@
+using _Game.Scripts.Utilities;
 using UnityEngine;
 
 namespace _Game.Scripts.Gameplay.MainCharacter
@@ -17,9 +18,14 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             visualController.MaximizeRigWeight();
             //refill-bullets
             weaponController.CurrentWeapon().ReloadBullets();
+            weaponController.UpdateWeaponUI();
             weaponController.SetWeaponReady(true);
         }
 
+        public void PlayReloadSound()
+        {
+            PlayerWeaponController.OnWeaponUsed?.Invoke(ConstantString.AnimationParameter.Reload);
+        }
 
         public void ReturnRig()
         {

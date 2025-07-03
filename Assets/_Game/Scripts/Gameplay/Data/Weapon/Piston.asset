@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Piston
   m_EditorClassIdentifier: 
   weaponName: Piston
+  weaponIcon: {fileID: 1068215163, guid: 3477fe9a26e0faa42b5a9b5b258229c1, type: 3}
+  weaponInfo: Basic gun, fast reload
   weaponType: 0
   reloadSpeed: 1
   equipmentSpeed: 1

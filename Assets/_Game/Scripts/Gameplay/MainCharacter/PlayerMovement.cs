@@ -1,3 +1,4 @@
+using System;
 using _Game.Scripts.Utilities;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace _Game.Scripts.Gameplay.MainCharacter
     public class PlayerMovement : MonoBehaviour
     {
         private Player player;
-
+        
         private CharacterController characterController;
         private PlayerControls controls;
         private Animator animator;
@@ -23,6 +24,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         private bool isRunning;
 
+        public static Action<bool> OnPlayerMove;
+        public static Action OnPlayerStop;
         private void Start()
         {
             player = GetComponent<Player>();
@@ -39,6 +42,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
 
         private void Update()
         {
+            if (player.controlsEnabled == false)
+                return;
             ApplyMovement();
             ApplyRotation();
             AnimatorControllers();
@@ -49,11 +54,11 @@ namespace _Game.Scripts.Gameplay.MainCharacter
             float xVelocity = Vector3.Dot(movementDirection.normalized, transform.right);
             float zVelocity = Vector3.Dot(movementDirection.normalized, transform.forward);
 
-            animator.SetFloat(Constant.AnimationParameter.XVelocity, xVelocity, .1f, Time.deltaTime);
-            animator.SetFloat(Constant.AnimationParameter.ZVelocity, zVelocity, .1f, Time.deltaTime);
+            animator.SetFloat(ConstantString.AnimationParameter.XVelocity, xVelocity, .1f, Time.deltaTime);
+            animator.SetFloat(ConstantString.AnimationParameter.ZVelocity, zVelocity, .1f, Time.deltaTime);
 
             bool playRunAnimation = isRunning & movementDirection.magnitude > 0;
-            animator.SetBool(Constant.AnimationParameter.IsRunning, playRunAnimation);
+            animator.SetBool(ConstantString.AnimationParameter.IsRunning, playRunAnimation);
         }
         private void ApplyRotation()
         {
@@ -69,8 +74,8 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             movementDirection = new Vector3(moveInput.x, 0, moveInput.y);
             ApplyGravity();
-
-            if (movementDirection.magnitude > 0)
+            
+            if (movementDirection.sqrMagnitude > 0.001f)
             {
                 characterController.Move(movementDirection * Time.deltaTime * speed);
             }
@@ -89,8 +94,16 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         {
             controls = player.controls;
 
-            controls.Character.Movement.performed += context => moveInput = context.ReadValue<Vector2>();
-            controls.Character.Movement.canceled += context => moveInput = Vector2.zero;
+            controls.Character.Movement.performed += context =>
+            {
+                moveInput = context.ReadValue<Vector2>();
+                OnPlayerMove?.Invoke(isRunning);
+            };
+            controls.Character.Movement.canceled += context =>
+            {
+                moveInput = Vector2.zero;
+                OnPlayerStop?.Invoke();
+            };
 
             controls.Character.Run.performed += context =>
             {

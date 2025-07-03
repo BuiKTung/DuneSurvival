@@ -7,7 +7,12 @@ using UnityEngine;
 public class Weapon_Data : ScriptableObject
 {
     public string weaponName;
-
+    public Sprite weaponIcon;
+    public string weaponInfo;
+    
+    [Header("Bullet info")]
+    public int bulletDamage;
+    
     [Header("Weapon generics")]
     public WeaponType weaponType;
     [Range(1, 3)]

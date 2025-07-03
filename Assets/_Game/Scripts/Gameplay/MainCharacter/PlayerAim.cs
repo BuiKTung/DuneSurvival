@@ -39,6 +39,12 @@ namespace _Game.Scripts.Gameplay.MainCharacter
         }
         private void Update()
         {
+            if (player.health.isDead)
+                 return;
+
+            if (player.controlsEnabled == false)
+                return;
+            
             if(Input.GetKeyDown(KeyCode.P))
                 isAimingPrecisly = !isAimingPrecisly;
 

@@ -17,9 +17,9 @@ TagManager:
   - Bullet
   - Aim
   - Enemy
-  - 
-  - 
-  - 
+  - IntersectionCheck
+  - Environment
+  - ZoneLimit
   - 
   - 
   - 

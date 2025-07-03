@@ -24,7 +24,7 @@ namespace _Game.Scripts.Utilities
             InitializeNewPool(ammoPickupPrefab);
         }
 
-        public GameObject GetObject(GameObject prefab)
+        public GameObject GetObject(GameObject prefab, Transform spawnPoint)
         {
             if(poolDictionary.ContainsKey(prefab) == false)
                 InitializeNewPool(prefab);
@@ -32,9 +32,9 @@ namespace _Game.Scripts.Utilities
                 CreateNewObject(prefab);
             
             GameObject objectToGet = poolDictionary[prefab].Dequeue();
-            objectToGet.SetActive(true);
             objectToGet.transform.parent = null;
-            
+            objectToGet.transform.position = spawnPoint.position;
+            objectToGet.SetActive(true);
             return objectToGet;
         }
 

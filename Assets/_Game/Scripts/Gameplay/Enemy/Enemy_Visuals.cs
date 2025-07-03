@@ -26,9 +26,8 @@ namespace _Game.Scripts.Gameplay.Enemy
         [SerializeField] private SkinnedMeshRenderer skinnedMeshRenderer;
         private void Start()
         {
-            //weaponModels = GetComponentsInChildren<Enemy_WeaponModel>(true);
             CollectCorruptionCrystals();
-            InvokeRepeating(nameof(SetupLook), 0, 1.5f);
+            // InvokeRepeating(nameof(SetupLook), 0, 1.5f);
         }
 
         public void EnableWeaponTrail(bool enable)
