@@ -36,13 +36,14 @@ namespace _Game.Scripts.Gameplay.Mission
                 }
             }
 
-            for (int i = 0; i > amountToKill; i++)
+            for (int i = 0; i < amountToKill; i++)
             {
                 if(validEnemies.Count <= 0 )
                     return;
                 int randomIndex = Random.Range(0, validEnemies.Count);
                 validEnemies[randomIndex].AddComponent<MissionObject_HuntTarget>();
                 validEnemies.RemoveAt(randomIndex);
+                Debug.Log(validEnemies.Count + " Enemies Killed");
             }
         }
 
@@ -66,7 +67,7 @@ namespace _Game.Scripts.Gameplay.Mission
         {
             string missionText = "Eliminate " + amountToKill + " enemies with signal disruptor.";
             string missionDetaiils = "Targets left: " + killsToGo;
-
+            Debug.Log(" Enemies Killed");
             UI.UI.Instance.inGameUI.UpdateMissionInfo(missionText, missionDetaiils);
         }
 

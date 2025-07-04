@@ -5666,7 +5666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
       propertyPath: meleeType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
       propertyPath: aggresionRange
@@ -11231,7 +11231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
       propertyPath: meleeType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
       propertyPath: aggresionRange

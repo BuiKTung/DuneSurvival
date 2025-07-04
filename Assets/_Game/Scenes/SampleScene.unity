@@ -16096,7 +16096,7 @@ MonoBehaviour:
   - {fileID: 1299235623}
   - {fileID: 900143947}
   - {fileID: 161076288}
-  playBgm: 0
+  playBgm: 1
   bgmIndex: 3
 --- !u!1 &1026434661
 GameObject:
@@ -38640,6 +38640,10 @@ PrefabInstance:
     - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
       propertyPath: meleeType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8318607298395518194, guid: 6ed16477eac935948956d7553f5163be, type: 3}
+      propertyPath: whatIsAlly.m_Bits
+      value: 2048
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
